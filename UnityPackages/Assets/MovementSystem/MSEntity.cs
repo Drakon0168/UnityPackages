@@ -12,6 +12,8 @@ namespace MovementSystem
         private MSEntityStats stats;
 
         private bool sprinting;
+        private bool dashing;
+        private float dashTime;
 
         #region Accessors
 
@@ -22,7 +24,14 @@ namespace MovementSystem
         {
             get
             {
-                if (sprinting)
+                if (dashing)
+                {
+                    if (stats.VariableDashSpeed)
+                        return stats.DashSpeedOverTime.Evaluate(dashTime / stats.DashTime) * stats.DashSpeed;
+                    else
+                        return stats.DashSpeed;
+                }
+                else if (sprinting)
                     return stats.SprintSpeed;
                 else
                     return stats.MoveSpeed;
@@ -57,18 +66,54 @@ namespace MovementSystem
         /// <param name="moveDirection">The direction to move in.</param>
         public void Move(Vector3 moveDirection)
         {
-            Vector3 targetVelocity = moveDirection * CurrentSpeed;
-            Vector3 forceDirection = targetVelocity - Velocity;
+            if (!dashing)
+            {
+                Vector3 targetVelocity = moveDirection * CurrentSpeed;
+                Vector3 forceDirection = targetVelocity - Velocity;
 
-            if (!stats.CanFly)
-                forceDirection.y = 0;
+                if (!stats.CanFly)
+                    forceDirection.y = 0;
 
-            float forceLength = forceDirection.magnitude;
+                float forceLength = forceDirection.magnitude;
 
-            if (forceLength != 0)
-                forceDirection /= forceLength;
+                if (forceLength != 0)
+                    forceDirection /= forceLength;
 
-            ApplyForce(forceDirection * stats.MoveForce * (forceLength / CurrentSpeed * 2));
+                ApplyForce(forceDirection * stats.MoveForce * (forceLength / CurrentSpeed * 2));
+            }
+        }
+
+        /// <summary>
+        /// Initiates a dash in the specified direction
+        /// </summary>
+        /// <param name="dashDirection"></param>
+        public void Dash(Vector3 dashDirection)
+        {
+            StartCoroutine(StartDash(dashDirection));
+        }
+
+        /// <summary>
+        /// Moves the player in the specified direction while dashing
+        /// </summary>
+        /// <param name="dashDirection"></param>
+        /// <returns></returns>
+        private IEnumerator StartDash(Vector3 dashDirection)
+        {
+            dashing = true;
+            dashTime = 0.0f;
+            dashDirection.y = 0;
+            dashDirection = dashDirection.normalized;
+
+            while(dashTime < stats.DashTime)
+            {
+                dashTime += Time.deltaTime;
+
+                Velocity = new Vector3(0, Velocity.y, 0) + dashDirection * CurrentSpeed;
+
+                yield return new WaitForEndOfFrame();
+            }
+
+            dashing = false;
         }
 
         /// <summary>

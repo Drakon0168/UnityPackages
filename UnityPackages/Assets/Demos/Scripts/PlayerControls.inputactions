@@ -19,13 +19,37 @@
                     "id": "a9afcb35-6413-45b6-a236-6387330edbfa",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Tap"
+                    "interactions": ""
                 },
                 {
                     "name": "Sprint",
                     "type": "Value",
                     "id": "a69cdfae-ee7e-43dc-b456-f0b4e5a3f581",
                     "expectedControlType": "DiscreteButton",
+                    "processors": "",
+                    "interactions": "Hold"
+                },
+                {
+                    "name": "Dash",
+                    "type": "Value",
+                    "id": "fdbd4098-b7ca-4b57-9fcd-e4224eed7cb0",
+                    "expectedControlType": "DiscreteButton",
+                    "processors": "",
+                    "interactions": "Tap"
+                },
+                {
+                    "name": "LightAttack",
+                    "type": "Button",
+                    "id": "4db9f307-8fd8-402f-a0da-81b5bfefc577",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "HeavyAttack",
+                    "type": "Button",
+                    "id": "4caee474-c22a-43c2-93db-e4c177346576",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 }
@@ -138,6 +162,72 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Sprint",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a0adaa84-1ec6-47e1-9dce-e316c49aae2a",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "LightAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8f8ed311-2c57-44b9-bf1f-7189f2518b55",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "LightAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2e952a4e-b4a8-4cbd-9072-5ee520fc009f",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "HeavyAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e2f22001-466e-47ee-858d-890d91f0c80b",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "HeavyAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "53093618-117a-4e78-9761-809fae6492b2",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "53fde7d6-6491-4217-94b7-c375b2c70e68",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Dash",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
