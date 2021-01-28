@@ -64,11 +64,37 @@ namespace MovementSystem
         /// Applies a movement force in the specified direction. The movement force is specified in the attached MSEntityStats.
         /// </summary>
         /// <param name="moveDirection">The direction to move in.</param>
-        public void Move(Vector3 moveDirection)
+        /// <param name="absoluteDirection">Whether or not the direction is given in absolute or relative coordinates</param>
+        public void Move(Vector3 moveDirection, bool absoluteDirection = true)
         {
             if (!dashing)
             {
-                Vector3 targetVelocity = moveDirection * CurrentSpeed;
+                //Rotate the move direction if it was given in relative coordinates
+                if (!absoluteDirection)
+                {
+                    moveDirection = transform.rotation * moveDirection;
+                }
+
+                float speed = CurrentSpeed;
+
+                //Calculate the speed if variable move speed is enabled
+                if (stats.VariableMoveSpeed)
+                {
+                    //HACK: Rounding issues with the dot product were causing NaN errors temporary fix with the Mathf.Clamp()
+                    float angle = Mathf.Acos(Mathf.Clamp(Vector3.Dot(transform.forward, moveDirection), -1.0f, 1.0f));
+
+                    if(angle > (180 - stats.BackAngle) * Mathf.Deg2Rad)
+                    {
+                        speed *= stats.BackSpeedMult;
+                    }
+                    else if(angle > stats.ForwardAngle * Mathf.Deg2Rad)
+                    {
+                        speed *= stats.StrafeSpeedMult;
+                    }
+                }
+
+                //Calculate the movement force to apply
+                Vector3 targetVelocity = moveDirection * speed;
                 Vector3 forceDirection = targetVelocity - Velocity;
 
                 if (!stats.CanFly)
@@ -86,9 +112,15 @@ namespace MovementSystem
         /// <summary>
         /// Initiates a dash in the specified direction
         /// </summary>
-        /// <param name="dashDirection"></param>
-        public void Dash(Vector3 dashDirection)
+        /// <param name="dashDirection">The direction to dash in</param>
+        /// <param name="absoluteDirection">Whether or not the dash direction is in absolute coordinates</param>
+        public void Dash(Vector3 dashDirection, bool absoluteDirection = true)
         {
+            if (!absoluteDirection)
+            {
+                dashDirection = transform.rotation * dashDirection;
+            }
+
             StartCoroutine(StartDash(dashDirection));
         }
 

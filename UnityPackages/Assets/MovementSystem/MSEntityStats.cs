@@ -11,6 +11,21 @@ namespace MovementSystem
         [Tooltip("The speed that the entity moves at by default.")]
         [SerializeField]
         private float moveSpeed = 2.5f;
+        [Tooltip("Whether or not to change speed based on the direction of motion.")]
+        [SerializeField]
+        private bool variableSpeed;
+        [Tooltip("Sideways movement multiplier. Only applicable with variable move speed.")]
+        [SerializeField]
+        private float strafeSpeedMult = 0.75f;
+        [Tooltip("Backwards speed multiplier. Only applicable with variable move speed.")]
+        [SerializeField]
+        private float backSpeedMult = 0.25f;
+        [Tooltip("The maximum angle from the transform's forward to count as forward movement in degrees.")]
+        [SerializeField]
+        private float forwardAngle = 60.0f;
+        [Tooltip("The maximum angle from the transform's back to count as forward movement in degrees.")]
+        [SerializeField]
+        private float backwardsAngle = 30.0f;
         [Tooltip("The speed that the entity moves at while sprinting.")]
         [SerializeField]
         private float sprintSpeed = 7.5f;
@@ -44,6 +59,46 @@ namespace MovementSystem
         public float MoveSpeed
         {
             get { return moveSpeed; }
+        }
+
+        /// <summary>
+        /// Sideways movement speed. Only applicable with variable move speed.
+        /// </summary>
+        public bool VariableMoveSpeed
+        {
+            get { return variableSpeed; }
+        }
+
+        /// <summary>
+        /// The speed multiplier to apply when straffing. Only applicable with variable move speed.
+        /// </summary>
+        public float StrafeSpeedMult
+        {
+            get { return strafeSpeedMult; }
+        }
+
+        /// <summary>
+        /// The speed multiplier to apply when backpedaling. Only applicable with variable move speed.
+        /// </summary>
+        public float BackSpeedMult
+        {
+            get { return backSpeedMult; }
+        }
+
+        /// <summary>
+        /// The maximum angle from the transform's forward to count as forward movement in degrees.
+        /// </summary>
+        public float ForwardAngle
+        {
+            get { return forwardAngle; }
+        }
+
+        /// <summary>
+        /// The maximum angle from the transform's back to count as forward movement in degrees.
+        /// </summary>
+        public float BackAngle
+        {
+            get { return backwardsAngle; }
         }
 
         /// <summary>

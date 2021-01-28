@@ -13,6 +13,11 @@ MonoBehaviour:
   m_Name: MSBaseStats
   m_EditorClassIdentifier: 
   moveSpeed: 2.5
+  variableSpeed: 1
+  strafeSpeedMult: 0.75
+  backSpeedMult: 0.25
+  forwardAngle: 60
+  backwardsAngle: 30
   sprintSpeed: 7.5
   moveForce: 100
   jumpVelocity: 5

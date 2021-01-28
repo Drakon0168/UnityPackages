@@ -21,7 +21,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        movementEntity.Move(moveDirection);
+        movementEntity.Move(moveDirection, false);
     }
 
     #region Input Management
@@ -51,7 +51,7 @@ public class Player : MonoBehaviour
 
     private void OnDash(InputValue value)
     {
-        movementEntity.Dash(moveDirection);
+        movementEntity.Dash(moveDirection, false);
     }
 
     private void OnJump(InputValue value)
