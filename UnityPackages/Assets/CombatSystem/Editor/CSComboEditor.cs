@@ -1,36 +1,76 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 using UnityEditor;
+using UnityEditor.Callbacks;
+using UnityEditor.UIElements;
 using CombatSystem;
 
 public class CSComboEditor : EditorWindow
 {
-    [MenuItem("Window/CombatSystem/ComboEditor")]
-    public static void ShowWindow()
+    private CSComboGraph graph;
+    private Toolbar toolbar;
+
+    [OnOpenAsset(1)]
+    public static bool Init(int instanceID, int col)
     {
-        EditorWindow.GetWindow<CSComboEditor>("Combo Editor");
+        Object asset = EditorUtility.InstanceIDToObject(instanceID);
+
+        if(asset is CSComboTree)
+        {
+            CSComboEditor window = GetWindow<CSComboEditor>();
+            window.Show();
+            window.Setup((CSComboTree)asset);
+            return true;
+        }
+
+        return false;
     }
 
-    private void OnGUI()
+    public void Setup(CSComboTree asset)
     {
-        if (Selection.activeGameObject != null)
+        SetupGraph(asset);
+        SetupToolbar();
+    }
+
+    public void SetupGraph(CSComboTree comboTree)
+    {
+        graph = new CSComboGraph(this, comboTree);
+        graph.StretchToParentSize();
+        rootVisualElement.Add(graph);
+    }
+
+    public void SetupToolbar()
+    {
+        toolbar = new Toolbar();
+
+        ToolbarButton addNodeButton = new ToolbarButton(AddNode);
+        addNodeButton.text = "Add Node";
+        toolbar.Add(addNodeButton);
+
+        ToolbarButton saveButton = new ToolbarButton(Save);
+        saveButton.text = "Save";
+        toolbar.Add(saveButton);
+
+        rootVisualElement.Add(toolbar);
+    }
+
+    public void AddNode()
+    {
+        graph.AddNode("New Attack");
+    }
+
+    public void Save()
+    {
+        Debug.LogError("Saving has not been implemented.");
+    }
+
+    public void OnDisable()
+    {
+        if (rootVisualElement.Contains(graph))
         {
-            CSAttack attack = Selection.activeGameObject.GetComponent<CSAttack>();
-
-            if (attack != null)
-            {
-                if (attack is CSMeleeAttack)
-                {
-                    CSMeleeAttack meleeAttack = (CSMeleeAttack)attack;
-
-                    GUILayout.Label("Melee Attack", EditorStyles.boldLabel);
-                    meleeAttack.Anticipation = EditorGUILayout.FloatField("Anticipation", meleeAttack.Anticipation);
-                    meleeAttack.Anticipation = EditorGUILayout.FloatField("Attack Time", meleeAttack.AttackTime);
-                    meleeAttack.Anticipation = EditorGUILayout.FloatField("Recovery", meleeAttack.Recovery);
-                    meleeAttack.Anticipation = EditorGUILayout.FloatField("Combo Time", meleeAttack.ComboTime);
-                }
-            }
+            rootVisualElement.Remove(graph);
         }
     }
 }

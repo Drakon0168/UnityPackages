@@ -6,7 +6,7 @@ namespace CombatSystem {
     public class CSWeapon : MonoBehaviour
     {
         [SerializeField]
-        private List<CSAttack> attacks;
+        private CSComboTree comboTree;
         [SerializeField]
         [Tooltip("The number of possible actions available to this weapon, used to decide which attacks to chain into, for example a weapon with only light or heavy attacks would have a combo inputs value of 2.")]
         private int comboInputs;
@@ -47,7 +47,7 @@ namespace CombatSystem {
         public void Combo(int input)
         {
             //TODO: Set this up to use a tree structure once the editor window is complete
-            nextAttack = attacks[input];
+            nextAttack = comboTree.NextAttack(input);
         }
 
         /// <summary>
@@ -55,7 +55,8 @@ namespace CombatSystem {
         /// </summary>
         public void ResetCombo()
         {
-            currentAttack = attacks[0];
+            comboTree.ResetCombo();
+            currentAttack = comboTree.CurrentAttack;
             nextAttack = null;
         }
 
