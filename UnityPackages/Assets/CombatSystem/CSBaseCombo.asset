@@ -9,11 +9,91 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07ce4b78e4f7f06409688214b28d2c66, type: 3}
+  m_Script: {fileID: 11500000, guid: a5a439a0b751a984c87b244a3add7313, type: 3}
   m_Name: CSBaseCombo
   m_EditorClassIdentifier: 
-  inputNames:
-  - Light Attack
-  - Heavy Attack
-  - Special Attack
-  attacks: []
+  attacks:
+  - id: 0
+  - id: 1
+  - id: 2
+  - id: 3
+  - id: 4
+  - id: 5
+  - id: 6
+  chains:
+  - Light
+  - Heavy
+  references:
+    version: 1
+    00000000:
+      type: {class: CSAttack, ns: CombatSystem, asm: Assembly-CSharp}
+      data:
+        name: Idle
+        graphPosition: {x: 128, y: 225}
+        chains:
+        - id: 1
+        - id: 5
+        parent:
+          id: 7
+    00000001:
+      type: {class: CSAttack, ns: CombatSystem, asm: Assembly-CSharp}
+      data:
+        name: Light 01
+        graphPosition: {x: 249, y: 183}
+        chains:
+        - id: 2
+        - id: 4
+        parent:
+          id: 0
+    00000002:
+      type: {class: CSAttack, ns: CombatSystem, asm: Assembly-CSharp}
+      data:
+        name: Light 02
+        graphPosition: {x: 418, y: 148}
+        chains:
+        - id: 3
+        - id: 7
+        parent:
+          id: 1
+    00000003:
+      type: {class: CSAttack, ns: CombatSystem, asm: Assembly-CSharp}
+      data:
+        name: Light 03
+        graphPosition: {x: 580, y: 148}
+        chains:
+        - id: 7
+        - id: 7
+        parent:
+          id: 2
+    00000004:
+      type: {class: CSAttack, ns: CombatSystem, asm: Assembly-CSharp}
+      data:
+        name: Medium
+        graphPosition: {x: 417, y: 252}
+        chains:
+        - id: 7
+        - id: 7
+        parent:
+          id: 1
+    00000005:
+      type: {class: CSAttack, ns: CombatSystem, asm: Assembly-CSharp}
+      data:
+        name: Heavy 01
+        graphPosition: {x: 246, y: 295}
+        chains:
+        - id: 7
+        - id: 6
+        parent:
+          id: 0
+    00000006:
+      type: {class: CSAttack, ns: CombatSystem, asm: Assembly-CSharp}
+      data:
+        name: Heavy 02
+        graphPosition: {x: 416, y: 362}
+        chains:
+        - id: 7
+        - id: 7
+        parent:
+          id: 5
+    00000007:
+      type: {class: , ns: , asm: }

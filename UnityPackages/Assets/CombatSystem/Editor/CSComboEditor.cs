@@ -5,72 +5,51 @@ using UnityEngine.UIElements;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEditor.UIElements;
-using CombatSystem;
 
-public class CSComboEditor : EditorWindow
+namespace CombatSystem
 {
-    private CSComboGraph graph;
-    private Toolbar toolbar;
-
-    [OnOpenAsset(1)]
-    public static bool Init(int instanceID, int col)
+    public class CSComboEditor : EditorWindow
     {
-        Object asset = EditorUtility.InstanceIDToObject(instanceID);
+        private CSComboGraphView graph;
+        private Toolbar toolbar;
 
-        if(asset is CSComboTree)
+        [OnOpenAsset(1)]
+        public static bool Init(int instanceID, int col)
         {
-            CSComboEditor window = GetWindow<CSComboEditor>();
-            window.Show();
-            window.Setup((CSComboTree)asset);
-            return true;
+            Object obj = EditorUtility.InstanceIDToObject(instanceID);
+
+            if(obj is CSCombo)
+            {
+                CSComboEditor window = GetWindow<CSComboEditor>();
+                window.Setup((CSCombo)obj);
+                window.Show();
+                window.titleContent.text = "Combo Editor";
+                return true;
+            }
+            return false;
         }
 
-        return false;
-    }
-
-    public void Setup(CSComboTree asset)
-    {
-        SetupGraph(asset);
-        SetupToolbar();
-    }
-
-    public void SetupGraph(CSComboTree comboTree)
-    {
-        graph = new CSComboGraph(this, comboTree);
-        graph.StretchToParentSize();
-        rootVisualElement.Add(graph);
-    }
-
-    public void SetupToolbar()
-    {
-        toolbar = new Toolbar();
-
-        ToolbarButton addNodeButton = new ToolbarButton(AddNode);
-        addNodeButton.text = "Add Node";
-        toolbar.Add(addNodeButton);
-
-        ToolbarButton saveButton = new ToolbarButton(Save);
-        saveButton.text = "Save";
-        toolbar.Add(saveButton);
-
-        rootVisualElement.Add(toolbar);
-    }
-
-    public void AddNode()
-    {
-        graph.AddNode("New Attack");
-    }
-
-    public void Save()
-    {
-        Debug.LogError("Saving has not been implemented.");
-    }
-
-    public void OnDisable()
-    {
-        if (rootVisualElement.Contains(graph))
+        public void Setup(CSCombo asset)
         {
-            rootVisualElement.Remove(graph);
+            graph = new CSComboGraphView();
+            graph.Setup(asset);
+            graph.StretchToParentSize();
+            rootVisualElement.Add(graph);
+
+            toolbar = new Toolbar();
+
+            Button saveButton = new Button(graph.Save);
+            saveButton.text = "Save";
+            toolbar.Add(saveButton);
+
+            Button addButton = new Button(() =>
+            {
+                graph.AddNode("New Attack");
+            });
+            addButton.text = "Add Node";
+            toolbar.Add(addButton);
+
+            rootVisualElement.Add(toolbar);
         }
     }
 }

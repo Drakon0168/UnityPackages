@@ -4,49 +4,72 @@ using UnityEngine;
 
 namespace CombatSystem
 {
-    public delegate void OnAttack();
-    public delegate void OnHit(List<CSEntity> targets);
-
-    public abstract class CSAttack : MonoBehaviour
+    [System.Serializable]
+    public class CSAttack
     {
-        protected OnAttack attackStart;
-        protected OnAttack attackEnd;
-        protected OnHit onHit;
+        [SerializeField]
+        private string name;
+        [SerializeField]
+        private Vector2 graphPosition;
+        [SerializeReference]
+        protected CSAttack[] chains = new CSAttack[0];
+        [SerializeReference]
+        protected CSAttack parent = null;
 
         #region Accessors
 
         /// <summary>
-        /// OnAttack event called when the anticipation time has ended and the attack time begins
+        /// The list of attacks that this attack can chain to
         /// </summary>
-        public OnAttack OnAttackStart
+        public CSAttack[] Chains
         {
-            get { return attackStart; }
-            set { attackStart = value; }
+            get { return chains; }
         }
 
         /// <summary>
-        /// OnAttack event called when the recovery time has ended and either the next attack starts or the combo ends
+        /// The number of attacks that this attack can possibly chain to
         /// </summary>
-        public OnAttack OnAttackEnd
+        public int ChainCount
         {
-            get { return attackEnd; }
-            set { attackEnd = value; }
+            get { return Chains.Length; }
+            set
+            {
+                chains = new CSAttack[value];
+            }
         }
 
         /// <summary>
-        /// OnHit event called when any CSEntities are hit by the attack. Parameters are a list of CSEntities that have been hit by the attack
+        /// The attack that this attack chains from
         /// </summary>
-        public OnHit OnHit
+        public CSAttack Parent
         {
-            get { return onHit; }
-            set { onHit = value; }
+            get { return parent; }
+            set { parent = value; }
+        }
+
+        /// <summary>
+        /// The name of the attack as seen in the graph
+        /// </summary>
+        public string Name
+        {
+            get { return name; }
+            set { name = value; }
+        }
+
+        /// <summary>
+        /// The position of this attack's node in the graph view
+        /// </summary>
+        public Vector2 GraphPosition
+        {
+            get { return graphPosition; }
+            set { graphPosition = value; }
         }
 
         #endregion
 
-        /// <summary>
-        /// Initiates an attack
-        /// </summary>
-        public abstract void Attack();
+        public CSAttack(string name)
+        {
+            this.name = name;
+        }
     }
 }
