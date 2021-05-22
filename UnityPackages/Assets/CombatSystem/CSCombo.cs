@@ -10,8 +10,39 @@ namespace CombatSystem
         [HideInInspector]
         [SerializeReference]
         private List<CSAttack> attacks;
+        private CSAttack activeAttack = null;
+        private CSAttack nextAttack = null;
         [SerializeField]
         private string[] chains;
+
+        #region Callbacks
+
+        /// <summary>
+        /// Called when the current attack is first started.
+        /// </summary>
+        public event AttackTimer WindupStart;
+
+        /// <summary>
+        /// Called when the current attack becomes active, this is when hitboxes will be activated
+        /// </summary>
+        public event AttackTimer AttackStart;
+
+        /// <summary>
+        /// Called at the end of the active time of the current attack this is when hitboxes should be disabled
+        /// </summary>
+        public event AttackTimer AttackEnd;
+
+        /// <summary>
+        /// Called at the end of the cooldown period when the current attack ends this is when new actions can be taken again
+        /// </summary>
+        public event AttackTimer CooldownEnd;
+
+        /// <summary>
+        /// Called when the combo timer for the current attack is finished this is the point to stop listening for new combo input
+        /// </summary>
+        public event AttackTimer ComboEnd;
+
+        #endregion
 
         #region Accessors
 
@@ -112,6 +143,83 @@ namespace CombatSystem
             }
 
             attacks.Remove(attack);
+        }
+
+        /// <summary>
+        /// Resets the combo to its idle state
+        /// </summary>
+        public void Reset()
+        {
+            SwitchAttack(Entry);
+        }
+
+        /// <summary>
+        /// Sets the next attack to move to when the current attack finishes
+        /// </summary>
+        /// <param name="input">The index of the input to use in the Chains list</param>
+        public void Chain(int input)
+        {
+            if(activeAttack.Chains[input] != null)
+            {
+                nextAttack = activeAttack.Chains[input];
+            }
+        }
+
+        /// <summary>
+        /// Switches the active attack to the given attack
+        /// </summary>
+        /// <param name="attack">The attack to switch to</param>
+        private void SwitchAttack(CSAttack attack)
+        {
+            activeAttack.WindupStart -= OnWindup;
+            activeAttack.AttackStart -= OnAttackStart;
+            activeAttack.AttackEnd -= OnAttackEnd;
+            activeAttack.CooldownEnd -= OnCooldownEnd;
+            activeAttack.ComboEnd -= OnComboEnd;
+
+            activeAttack = attack;
+            nextAttack = null;
+
+            activeAttack.WindupStart += OnWindup;
+            activeAttack.AttackStart += OnAttackStart;
+            activeAttack.AttackEnd += OnAttackEnd;
+            activeAttack.CooldownEnd += OnCooldownEnd;
+            activeAttack.ComboEnd += OnComboEnd;
+        }
+
+        #endregion
+
+        #region Callbacks
+
+        private void OnWindup()
+        {
+            WindupStart();
+        }
+
+        private void OnAttackStart()
+        {
+            AttackStart();
+        }
+
+        private void OnAttackEnd()
+        {
+            AttackEnd();
+        }
+
+        private void OnCooldownEnd()
+        {
+            CooldownEnd();
+
+            if(nextAttack != null)
+            {
+                nextAttack.Attack();
+            }
+        }
+
+        private void OnComboEnd()
+        {
+            ComboEnd();
+            Reset();
         }
 
         #endregion

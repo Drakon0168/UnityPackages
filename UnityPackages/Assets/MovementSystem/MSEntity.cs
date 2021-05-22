@@ -6,6 +6,8 @@ using MovementSystem;
 
 namespace MovementSystem
 {
+    public delegate void OnDash();
+
     public class MSEntity : MSPhysicsObject
     {
         [SerializeField]
@@ -55,6 +57,24 @@ namespace MovementSystem
             get { return sprinting; }
             set { sprinting = value; }
         }
+
+        /// <summary>
+        /// Whether or not the entity is currently dashing
+        /// </summary>
+        public bool Dashing
+        {
+            get { return dashing; }
+        }
+
+        /// <summary>
+        /// Called when the entity begins a dash
+        /// </summary>
+        public event OnDash DashStart;
+
+        /// <summary>
+        /// Called when the entity ends a dash
+        /// </summary>
+        public event OnDash DashEnd;
 
         #endregion
 
@@ -131,6 +151,7 @@ namespace MovementSystem
         /// <returns></returns>
         private IEnumerator StartDash(Vector3 dashDirection)
         {
+            DashStart();
             dashing = true;
             dashTime = 0.0f;
             dashDirection.y = 0;
@@ -146,6 +167,7 @@ namespace MovementSystem
             }
 
             dashing = false;
+            DashEnd();
         }
 
         /// <summary>
