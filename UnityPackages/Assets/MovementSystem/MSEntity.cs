@@ -151,7 +151,7 @@ namespace MovementSystem
         /// <returns></returns>
         private IEnumerator StartDash(Vector3 dashDirection)
         {
-            DashStart();
+            DashStart?.Invoke();
             dashing = true;
             dashTime = 0.0f;
             dashDirection.y = 0;
@@ -167,7 +167,7 @@ namespace MovementSystem
             }
 
             dashing = false;
-            DashEnd();
+            DashEnd?.Invoke();
         }
 
         /// <summary>
