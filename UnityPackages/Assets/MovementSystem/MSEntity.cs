@@ -103,11 +103,11 @@ namespace MovementSystem
                     //HACK: Rounding issues with the dot product were causing NaN errors temporary fix with the Mathf.Clamp()
                     float angle = Mathf.Acos(Mathf.Clamp(Vector3.Dot(transform.forward, moveDirection), -1.0f, 1.0f));
 
-                    if(angle > (180 - stats.BackAngle) * Mathf.Deg2Rad)
+                    if (angle > (180 - stats.BackAngle) * Mathf.Deg2Rad)
                     {
                         speed *= stats.BackSpeedMult;
                     }
-                    else if(angle > stats.ForwardAngle * Mathf.Deg2Rad)
+                    else if (angle > stats.ForwardAngle * Mathf.Deg2Rad)
                     {
                         speed *= stats.StrafeSpeedMult;
                     }
@@ -125,7 +125,7 @@ namespace MovementSystem
                 if (forceLength != 0)
                     forceDirection /= forceLength;
 
-                ApplyForce(forceDirection * stats.MoveForce * (forceLength / CurrentSpeed * 2));
+                ApplyForce(forceDirection * Mathf.Clamp(forceLength / stats.AccelerationTime, 0.0f, stats.MoveForce));
             }
         }
 
@@ -148,7 +148,6 @@ namespace MovementSystem
         /// Moves the player in the specified direction while dashing
         /// </summary>
         /// <param name="dashDirection"></param>
-        /// <returns></returns>
         private IEnumerator StartDash(Vector3 dashDirection)
         {
             DashStart?.Invoke();

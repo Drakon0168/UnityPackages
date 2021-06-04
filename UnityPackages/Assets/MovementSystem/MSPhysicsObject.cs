@@ -7,9 +7,7 @@ namespace MovementSystem
     [RequireComponent(typeof(Rigidbody))]
     public class MSPhysicsObject : MonoBehaviour
     {
-        private new Rigidbody rigidbody;
-
-        private Vector3 acceleration;
+        protected new Rigidbody rigidbody;
 
         #region Accessors
 
@@ -32,15 +30,6 @@ namespace MovementSystem
         }
 
         /// <summary>
-        /// The current acceleration of the object
-        /// </summary>
-        public Vector3 Acceleration
-        {
-            get { return acceleration; }
-            set { acceleration = value; }
-        }
-
-        /// <summary>
         /// The mass of the object
         /// </summary>
         public float Mass
@@ -57,12 +46,6 @@ namespace MovementSystem
             rigidbody = GetComponent<Rigidbody>();
         }
 
-        void Update()
-        {
-            Velocity += acceleration * Time.deltaTime;
-            Acceleration = Vector3.zero;
-        }
-
         #endregion
 
         #region Physics
@@ -75,9 +58,13 @@ namespace MovementSystem
         public void ApplyForce(Vector3 force, bool affectedByMass = true)
         {
             if (affectedByMass)
-                force /= Mass;
-
-            Acceleration += force;
+            {
+                rigidbody.AddForce(force, ForceMode.Force);
+            }
+            else
+            {
+                rigidbody.AddForce(force, ForceMode.Acceleration);
+            }
         }
 
         #endregion

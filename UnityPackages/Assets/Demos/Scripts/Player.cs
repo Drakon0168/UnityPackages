@@ -19,7 +19,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        movementEntity.Move(moveDirection, false);
+        movementEntity.Move(moveDirection);
     }
 
     #region Input Management

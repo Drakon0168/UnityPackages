@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MSBaseStats
   m_EditorClassIdentifier: 
   moveSpeed: 2.5
-  variableSpeed: 1
+  variableSpeed: 0
   strafeSpeedMult: 0.75
   backSpeedMult: 0.25
   forwardAngle: 60
@@ -29,15 +29,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0
-      value: 0.75
-      inSlope: 2.5
-      outSlope: 2.5
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
       time: 0.1
       value: 1
       inSlope: 0
@@ -49,20 +40,20 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0.6
       value: 1
-      inSlope: 0
-      outSlope: 0
+      inSlope: 0.0020215174
+      outSlope: 0.0020215174
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.33333334
-      outWeight: 0.33333334
+      outWeight: 0.7291666
     - serializedVersion: 3
       time: 1
       value: 0.75
-      inSlope: -0.0024609773
-      outSlope: -0.0024609773
+      inSlope: -0.9721081
+      outSlope: -0.9721081
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.53240746
+      inWeight: 0.106481515
       outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 2

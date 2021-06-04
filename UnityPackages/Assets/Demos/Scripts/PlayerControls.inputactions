@@ -23,19 +23,19 @@
                 },
                 {
                     "name": "Sprint",
-                    "type": "Value",
+                    "type": "Button",
                     "id": "a69cdfae-ee7e-43dc-b456-f0b4e5a3f581",
-                    "expectedControlType": "DiscreteButton",
+                    "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Hold"
+                    "interactions": "Press(behavior=2)"
                 },
                 {
                     "name": "Dash",
-                    "type": "Value",
+                    "type": "Button",
                     "id": "fdbd4098-b7ca-4b57-9fcd-e4224eed7cb0",
-                    "expectedControlType": "DiscreteButton",
+                    "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Tap"
+                    "interactions": ""
                 },
                 {
                     "name": "LightAttack",

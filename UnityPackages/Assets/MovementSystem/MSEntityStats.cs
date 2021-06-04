@@ -29,6 +29,9 @@ namespace MovementSystem
         [Tooltip("The speed that the entity moves at while sprinting.")]
         [SerializeField]
         private float sprintSpeed = 7.5f;
+        [Tooltip("The target time for it to take the entity to move at its desired velocity.")]
+        [SerializeField]
+        private float accelerationTime = 0.2f;
         [Tooltip("The amount of force to apply when moving the entity. Lower values may cause the entity to drift, set to 100 by default.")]
         [SerializeField]
         private float moveForce = 100.0f;
@@ -107,6 +110,14 @@ namespace MovementSystem
         public float SprintSpeed
         {
             get { return sprintSpeed; }
+        }
+
+        /// <summary>
+        /// The target time for it to take the entity to move at its desired velocity.
+        /// </summary>
+        public float AccelerationTime
+        {
+            get { return accelerationTime; }
         }
 
         /// <summary>
