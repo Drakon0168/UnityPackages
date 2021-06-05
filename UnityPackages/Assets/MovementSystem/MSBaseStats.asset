@@ -19,6 +19,7 @@ MonoBehaviour:
   forwardAngle: 60
   backwardsAngle: 30
   sprintSpeed: 7.5
+  accelerationTime: 0.2
   moveForce: 100
   jumpVelocity: 5
   canFly: 0
