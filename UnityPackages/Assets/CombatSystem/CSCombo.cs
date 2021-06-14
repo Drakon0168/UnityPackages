@@ -12,6 +12,7 @@ namespace CombatSystem
         private List<CSAttack> attacks;
         private CSAttack activeAttack = null;
         private CSAttack nextAttack = null;
+
         [SerializeField]
         private string[] chains;
 
@@ -42,9 +43,22 @@ namespace CombatSystem
         /// </summary>
         public event AttackTimer ComboEnd;
 
+        /// <summary>
+        /// Used to tell the weapon when to start attacks
+        /// </summary>
+        public event AttackTimer QueueAttack;
+
         #endregion
 
         #region Accessors
+
+        private void OnValidate()
+        {
+            if(Entry.Chains.Length != Chains.Length)
+            {
+                Entry.ChainCount = Chains.Length;
+            }
+        }
 
         /// <summary>
         /// The full list of attacks in this combo tree
@@ -76,6 +90,7 @@ namespace CombatSystem
             set
             {
                 Attacks[0] = value;
+                activeAttack = value;
             }
         }
 
@@ -85,6 +100,16 @@ namespace CombatSystem
         public string[] Chains
         {
             get { return chains; }
+        }
+
+        public CSAttack ActiveAttack
+        {
+            get { return activeAttack; }
+        }
+
+        public CSAttack NextAttack
+        {
+            get { return nextAttack;}
         }
 
         #endregion
@@ -159,9 +184,17 @@ namespace CombatSystem
         /// <param name="input">The index of the input to use in the Chains list</param>
         public void Chain(int input)
         {
-            if(activeAttack.Chains[input] != null)
+            if (activeAttack.Chains[input] != null)
             {
-                nextAttack = activeAttack.Chains[input];
+                if (activeAttack.Chains[input] != null)
+                {
+                    nextAttack = activeAttack.Chains[input];
+                }
+
+                if(activeAttack == Entry && nextAttack != null)
+                {
+                    SwitchAttack(nextAttack);
+                }
             }
         }
 
@@ -185,6 +218,8 @@ namespace CombatSystem
             activeAttack.AttackEnd += OnAttackEnd;
             activeAttack.CooldownEnd += OnCooldownEnd;
             activeAttack.ComboEnd += OnComboEnd;
+
+            QueueAttack?.Invoke();
         }
 
         #endregion
@@ -193,33 +228,33 @@ namespace CombatSystem
 
         private void OnWindup()
         {
-            WindupStart();
+            WindupStart?.Invoke();
         }
 
         private void OnAttackStart()
         {
-            AttackStart();
+            AttackStart?.Invoke();
         }
 
         private void OnAttackEnd()
         {
-            AttackEnd();
+            AttackEnd?.Invoke();
         }
 
         private void OnCooldownEnd()
         {
-            CooldownEnd();
-
             if(nextAttack != null)
             {
                 nextAttack.Attack();
             }
+
+            CooldownEnd?.Invoke();
+            QueueAttack?.Invoke();
         }
 
         private void OnComboEnd()
         {
-            ComboEnd();
-            Reset();
+            ComboEnd?.Invoke();
         }
 
         #endregion

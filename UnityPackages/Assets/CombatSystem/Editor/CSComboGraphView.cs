@@ -76,7 +76,6 @@ namespace CombatSystem
         {
             CSComboGraphViewNode newNode = new CSComboGraphViewNode(data, entry);
             newNode.SetPosition(new Rect(data.GraphPosition, new Vector2(200, 150)));
-            newNode.Setup();
 
             if (entry)
             {
@@ -87,7 +86,7 @@ namespace CombatSystem
                 inputPort = GeneratePort(newNode, Direction.Input);
             }
 
-            for(int i = 0; i < data.ChainCount; i++)
+            for(int i = 0; i < asset.Chains.Length; i++)
             {
                 Port outputPort = GeneratePort(newNode, Direction.Output);
                 outputPort.portName = asset.Chains[i];

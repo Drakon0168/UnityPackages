@@ -11,17 +11,27 @@ namespace CombatSystem
     {
         [SerializeField]
         private string name;
-        [SerializeField]
         private Vector2 graphPosition;
         [SerializeReference]
         protected CSAttack[] chains = new CSAttack[0];
         [SerializeReference]
         protected CSAttack parent = null;
 
+        [SerializeField]
+        protected float damageMult;
+        [SerializeReference]
+        protected Collider collider;
+        [SerializeField]
         protected float windupTime;
+        [SerializeField]
         protected float attackTime;
+        [SerializeField]
         protected float cooldownTime;
+        [SerializeField]
         protected float comboTime;
+
+        protected bool attacking = false;
+        protected bool canCombo = false;
 
         #region Callbacks
 
@@ -102,6 +112,24 @@ namespace CombatSystem
         }
 
         /// <summary>
+        /// The collider to use as this attack's hitbox
+        /// </summary>
+        public Collider Collider
+        {
+            get { return collider; }
+            set { collider = value; }
+        }
+
+        /// <summary>
+        /// The multiplier to apply to the weapon's base damage
+        /// </summary>
+        public float DamageMult
+        {
+            get { return damageMult; }
+            set { damageMult = value; }
+        }
+
+        /// <summary>
         /// The time to wait between when the attack is started and when it actually takes effect, this is the time between the WindupStart and Attack start events
         /// </summary>
         public float WindupTime
@@ -137,6 +165,22 @@ namespace CombatSystem
             set { comboTime = value; }
         }
 
+        /// <summary>
+        /// Whether or not the attack is currently in the process of attacking
+        /// </summary>
+        public bool Attacking
+        {
+            get { return attacking; }
+        }
+
+        /// <summary>
+        /// Whether or not the attack is still within the combo window
+        /// </summary>
+        public bool CanCombo
+        {
+            get { return canCombo; }
+        }
+
         #endregion
 
         public CSAttack(string name)
@@ -149,23 +193,40 @@ namespace CombatSystem
         /// </summary>
         public IEnumerator Attack()
         {
-            WindupStart();
+            WindupStart?.Invoke();
+            attacking = true;
+            canCombo = true;
+            Debug.Log($"{Name} is in windup");
 
             yield return new WaitForSeconds(windupTime);
 
-            AttackStart();
+            AttackStart?.Invoke();
+            if (collider != null)
+            {
+                collider.enabled = true;
+            }
+            Debug.Log($"{Name} is attacking");
 
             yield return new WaitForSeconds(attackTime);
 
-            AttackEnd();
+            AttackEnd?.Invoke();
+            if (collider != null)
+            {
+                collider.enabled = false;
+            }
+            Debug.Log($"{Name} is in cooldown");
 
             yield return new WaitForSeconds(cooldownTime);
 
-            CooldownEnd();
+            CooldownEnd?.Invoke();
+            attacking = false;
+            Debug.Log($"{Name} is in combo time");
 
             yield return new WaitForSeconds(comboTime);
 
-            ComboEnd();
+            ComboEnd?.Invoke();
+            canCombo = false;
+            Debug.Log($"{Name} can no longer combo");
         }
     }
 }

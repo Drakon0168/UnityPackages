@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEditor.UIElements;
 using UnityEditor.Experimental.GraphView;
 
 namespace CombatSystem
@@ -9,6 +10,7 @@ namespace CombatSystem
     public class CSComboGraphViewNode : Node
     {
         private CSAttack data;
+        private CSAttackElement attackElement;
         private bool entry;
 
         public CSAttack Data
@@ -20,30 +22,47 @@ namespace CombatSystem
         {
             this.data = data;
             this.entry = entry;
-        }
-
-        public void Setup()
-        {
             title = data.Name;
 
-            Label titleLabel = titleContainer.Q<Label>();
-            titleLabel.AddManipulator(new Clickable(e => 
+            if (!entry)
             {
-                titleLabel.visible = false;
+                VisualElement divider = new VisualElement();
+                divider.name = "divider";
+                divider.AddToClassList("horizontal");
+                contentContainer.Q<VisualElement>("contents").Add(divider);
 
-                TextField titleField = new TextField();
-                titleField.isDelayed = true;
-                titleField.value = title;
-                titleField.RegisterCallback<FocusOutEvent>(a =>
+                attackElement = new CSAttackElement(this.data);
+                contentContainer.Q<VisualElement>("contents").Add(attackElement);
+
+                Label titleLabel = titleContainer.Q<Label>();
+                TextField renameField = new TextField();
+                renameField.style.display = DisplayStyle.None;
+
+                titleLabel.AddManipulator(new Clickable(() =>
                 {
-                    title = titleField.value;
-                    data.Name = titleField.value;
-                    titleField.RemoveFromHierarchy();
-                    titleLabel.visible = true;
+                    titleLabel.style.display = DisplayStyle.None;
+                    renameField.style.display = DisplayStyle.Flex;
+                    renameField.Q<VisualElement>("unity-text-input").Focus();
+                }));
+
+                renameField.SetValueWithoutNotify(Data.Name);
+                renameField.isDelayed = true;
+                renameField.RegisterCallback<FocusOutEvent>(e =>
+                {
+                    titleLabel.style.display = DisplayStyle.Flex;
+                    renameField.style.display = DisplayStyle.None;
                 });
-                titleContainer.Add(titleField);
-                titleField.SendToBack();
-            }));
+                renameField.RegisterValueChangedCallback(e =>
+                {
+                    title = e.newValue;
+                    titleLabel.text = title;
+
+                    titleLabel.style.display = DisplayStyle.Flex;
+                    renameField.style.display = DisplayStyle.None;
+                });
+                titleContainer.Add(renameField);
+                renameField.SendToBack();
+            }
         }
 
         public void Save(CSCombo asset)

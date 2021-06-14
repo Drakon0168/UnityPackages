@@ -34,5 +34,69 @@ namespace CombatSystem
         [Tooltip("The amount of time to wait before starting shield regen after taking damage.")]
         [SerializeField]
         private float shieldRegenTime = 2.5f;
+
+        /// <summary>
+        /// The maximum amount of health that this entity can have.
+        /// </summary>
+        public float MaxHealth
+        {
+            get { return maxHealth; }
+        }
+
+        /// <summary>
+        /// Whether or not health should be able to regenerate. True to enable health regen.
+        /// </summary>
+        public bool HealthRegenEnabled
+        {
+            get { return healthRegenEnabled; }
+        }
+
+        /// <summary>
+        /// The amount of health to regenerate per second when health regen starts.
+        /// </summary>
+        public float HealthRegen
+        {
+            get { return healthRegen; }
+        }
+
+        /// <summary>
+        /// The amount of time to wait before starting health regeneration after taking damage.
+        /// </summary>
+        public float HealthRegenTime
+        {
+            get { return healthRegenTime; }
+        }
+
+        /// <summary>
+        /// Whether or not to enable shields.
+        /// </summary>
+        public bool ShieldsEnabled
+        {
+            get { return shieldsEnabled; }
+        }
+
+        /// <summary>
+        /// The maximum shields that this entity can have.
+        /// </summary>
+        public float MaxShields
+        {
+            get { return maxShield; }
+        }
+
+        /// <summary>
+        /// The rate at which shields regenerate per second when shield regen starts.
+        /// </summary>
+        public float ShieldRegen
+        {
+            get { return shieldRegen; }
+        }
+
+        /// <summary>
+        /// The amount of time to wait before starting shield regen after taking damage.
+        /// </summary>
+        public float ShieldRegenTime
+        {
+            get { return shieldRegenTime; }
+        }
     }
 }

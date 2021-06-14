@@ -29,71 +29,106 @@ MonoBehaviour:
       type: {class: CSAttack, ns: CombatSystem, asm: Assembly-CSharp}
       data:
         name: Idle
-        graphPosition: {x: 128, y: 225}
         chains:
         - id: 1
         - id: 5
         parent:
           id: 7
+        damageMult: 0
+        collider: {fileID: 0}
+        windupTime: 0
+        attackTime: 0
+        cooldownTime: 0
+        comboTime: 0
     00000001:
       type: {class: CSAttack, ns: CombatSystem, asm: Assembly-CSharp}
       data:
         name: Light 01
-        graphPosition: {x: 249, y: 183}
         chains:
         - id: 2
         - id: 4
         parent:
           id: 0
+        damageMult: 0
+        collider: {fileID: 0}
+        windupTime: 0
+        attackTime: 1
+        cooldownTime: 0.5
+        comboTime: 0
     00000002:
       type: {class: CSAttack, ns: CombatSystem, asm: Assembly-CSharp}
       data:
         name: Light 02
-        graphPosition: {x: 418, y: 148}
         chains:
         - id: 3
         - id: 7
         parent:
           id: 1
+        damageMult: 0
+        collider: {fileID: 0}
+        windupTime: 0
+        attackTime: 1
+        cooldownTime: 0.5
+        comboTime: 0
     00000003:
       type: {class: CSAttack, ns: CombatSystem, asm: Assembly-CSharp}
       data:
         name: Light 03
-        graphPosition: {x: 580, y: 148}
         chains:
         - id: 7
         - id: 7
         parent:
           id: 2
+        damageMult: 0
+        collider: {fileID: 0}
+        windupTime: 0
+        attackTime: 1
+        cooldownTime: 0.5
+        comboTime: 0
     00000004:
       type: {class: CSAttack, ns: CombatSystem, asm: Assembly-CSharp}
       data:
         name: Medium
-        graphPosition: {x: 417, y: 252}
         chains:
         - id: 7
         - id: 7
         parent:
           id: 1
+        damageMult: 0
+        collider: {fileID: 0}
+        windupTime: 0
+        attackTime: 1
+        cooldownTime: 0.5
+        comboTime: 0
     00000005:
       type: {class: CSAttack, ns: CombatSystem, asm: Assembly-CSharp}
       data:
         name: Heavy 01
-        graphPosition: {x: 246, y: 295}
         chains:
         - id: 7
         - id: 6
         parent:
           id: 0
+        damageMult: 0
+        collider: {fileID: 0}
+        windupTime: 0
+        attackTime: 1
+        cooldownTime: 0.5
+        comboTime: 0
     00000006:
       type: {class: CSAttack, ns: CombatSystem, asm: Assembly-CSharp}
       data:
         name: Heavy 02
-        graphPosition: {x: 416, y: 362}
         chains:
         - id: 7
         - id: 7
         parent:
           id: 5
+        damageMult: 0
+        collider: {fileID: 0}
+        windupTime: 0
+        attackTime: 1
+        cooldownTime: 0.5
+        comboTime: 0
     00000007:
       type: {class: , ns: , asm: }

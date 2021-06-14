@@ -9,6 +9,8 @@ public class Player : MonoBehaviour
 {
     private PlayerInput input;
     private MSEntity movementEntity;
+    [SerializeField]
+    private CSWeapon weapon;
     private Vector3 moveDirection;
 
     void Awake()
@@ -26,12 +28,12 @@ public class Player : MonoBehaviour
 
     private void OnLightAttack(InputValue value)
     {
-        Debug.Log("Initiating light attack.");
+        weapon.Attack(0);
     }
 
     private void OnHeavyAttack(InputValue value)
     {
-        Debug.Log("Heavy Attack");
+        weapon.Attack(1);
     }
 
     private void OnMove(InputValue value)

@@ -21,12 +21,17 @@ namespace CombatSystem
             if(obj is CSCombo)
             {
                 CSComboEditor window = GetWindow<CSComboEditor>();
-                window.Setup((CSCombo)obj);
-                window.Show();
-                window.titleContent.text = "Combo Editor";
+                window.OpenWindow((CSCombo)obj);
                 return true;
             }
             return false;
+        }
+
+        public void OpenWindow(CSCombo asset)
+        {
+            Setup(asset);
+            Show();
+            titleContent.text = asset.name;
         }
 
         public void Setup(CSCombo asset)
