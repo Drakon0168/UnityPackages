@@ -13,25 +13,12 @@ namespace CombatSystem
         private CSComboGraphView graph;
         private Toolbar toolbar;
 
-        [OnOpenAsset(1)]
-        public static bool Init(int instanceID, int col)
+        public static void OpenWindow(CSCombo asset)
         {
-            Object obj = EditorUtility.InstanceIDToObject(instanceID);
-
-            if(obj is CSCombo)
-            {
-                CSComboEditor window = GetWindow<CSComboEditor>();
-                window.OpenWindow((CSCombo)obj);
-                return true;
-            }
-            return false;
-        }
-
-        public void OpenWindow(CSCombo asset)
-        {
-            Setup(asset);
-            Show();
-            titleContent.text = asset.name;
+            CSComboEditor window = GetWindow<CSComboEditor>();
+            window.Setup(asset);
+            window.titleContent.text = "Combo Editor";
+            window.Show();
         }
 
         public void Setup(CSCombo asset)

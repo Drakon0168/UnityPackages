@@ -8,17 +8,40 @@ namespace CombatSystem
     [CustomEditor(typeof(CSWeapon))]
     public class CSWeaponEditor : Editor
     {
+        private SerializedProperty stats;
+        private SerializedProperty attackTypes;
+        private SerializedProperty combo;
+
+        private void OnEnable()
+        {
+            stats = serializedObject.FindProperty("stats");
+            attackTypes = serializedObject.FindProperty("attackTypes");
+            combo = serializedObject.FindProperty("combo");
+        }
+
         public override void OnInspectorGUI()
         {
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("stats"), new GUIContent("Stats", "The base stats of this weapon."));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("combo"), new GUIContent("Combo", "The combo tree used by this weapon."));
+            serializedObject.Update();
+
+            EditorGUILayout.PropertyField(stats, new GUIContent("Stats", "The base stats of this weapon."));
+            int attackTypeCount = attackTypes.arraySize;
+            EditorGUILayout.PropertyField(attackTypes, new GUIContent("Attack Types", "A list of the different inputs that this weapon supports."));
+
+            CSWeapon weapon = (CSWeapon)serializedObject.targetObject;
 
             if (GUILayout.Button("Edit Combo"))
             {
-                EditorWindow.GetWindow<CSComboEditor>().OpenWindow((CSCombo)serializedObject.FindProperty("combo").objectReferenceValue);
+                CSComboEditor.OpenWindow(weapon.Combo);
             }
 
-            serializedObject.ApplyModifiedProperties();
+            if (serializedObject.ApplyModifiedProperties())
+            {
+                if (attackTypeCount != attackTypes.arraySize)
+                {
+                    //TODO: Check for changes in attack name as well
+                    weapon.Combo.Chains = weapon.Chains;
+                }
+            }
         }
     }
 }
