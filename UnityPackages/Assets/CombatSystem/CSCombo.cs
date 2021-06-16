@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace CombatSystem
 {
-    [System.Serializable]
-    public class CSCombo : Object
+    [CreateAssetMenu(fileName = "New Combo", menuName = "CombatSystem/Combo")]
+    public class CSCombo : ScriptableObject
     {
         [HideInInspector]
         [SerializeReference]
@@ -52,6 +52,14 @@ namespace CombatSystem
 
         #region Accessors
 
+        private void OnValidate()
+        {
+            if(Entry.Chains.Length != Chains.Length)
+            {
+                Entry.ChainCount = Chains.Length;
+            }
+        }
+
         /// <summary>
         /// The full list of attacks in this combo tree
         /// </summary>
@@ -62,7 +70,7 @@ namespace CombatSystem
                 if(attacks == null || attacks.Count == 0)
                 {
                     attacks = new List<CSAttack>();
-                    attacks.Add(new CSAttack("Idle"));
+                    attacks.Add(new CSAttack("Entry"));
                     attacks[0].ChainCount = Chains.Length;
                 }
 
@@ -92,12 +100,6 @@ namespace CombatSystem
         public string[] Chains
         {
             get { return chains; }
-            set
-            {
-                chains = value;
-                attacks.Clear();
-                Entry.ChainCount = value.Length;
-            }
         }
 
         public CSAttack ActiveAttack
@@ -112,21 +114,6 @@ namespace CombatSystem
 
         #endregion
 
-        public CSCombo(string[] chains, List<CSAttack> attacks)
-        {
-            this.chains = chains;
-            this.attacks = attacks;
-        }
-
-        private void OnValidate()
-        {
-            if (Entry.Chains.Length != Chains.Length)
-            {
-                Attacks.Clear();
-                Entry.ChainCount = Chains.Length;
-            }
-        }
-
         #region Attack Management
 
         /// <summary>
@@ -138,7 +125,7 @@ namespace CombatSystem
         public void AddAttack(CSAttack attack, CSAttack parent, int chain)
         {
             attack.ChainCount = Chains.Length;
-            Attacks.Add(attack);
+            attacks.Add(attack);
 
             if (parent != null)
             {
@@ -180,7 +167,7 @@ namespace CombatSystem
                 attack.Parent = null;
             }
 
-            Attacks.Remove(attack);
+            attacks.Remove(attack);
         }
 
         /// <summary>

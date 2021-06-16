@@ -47,6 +47,9 @@ namespace CombatSystem
         {
             asset.RemoveAttack(asset.Entry);
             entry.Save(asset);
+
+            EditorUtility.SetDirty(asset);
+            AssetDatabase.SaveAssets();
         }
 
         #region Node Management

@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5a439a0b751a984c87b244a3add7313, type: 3}
+  m_Name: New Combo
+  m_EditorClassIdentifier: 
+  attacks:
+  - id: 0
+  - id: 1
+  - id: 2
+  chains:
+  - Light
+  - Heavy
+  references:
+    version: 1
+    00000000:
+      type: {class: CSAttack, ns: CombatSystem, asm: Assembly-CSharp}
+      data:
+        name: Entry
+        chains:
+        - id: 1
+        - id: 2
+        parent:
+          id: 3
+        collider: {fileID: 0}
+        windupTime: 0
+        attackTime: 0
+        cooldownTime: 0
+        comboTime: 0
+    00000001:
+      type: {class: CSAttack, ns: CombatSystem, asm: Assembly-CSharp}
+      data:
+        name: New Attack
+        chains:
+        - id: 3
+        - id: 3
+        parent:
+          id: 0
+        collider: {fileID: 0}
+        windupTime: 0.1
+        attackTime: 0.75
+        cooldownTime: 0.2
+        comboTime: 1
+    00000002:
+      type: {class: CSAttack, ns: CombatSystem, asm: Assembly-CSharp}
+      data:
+        name: New Attack
+        chains:
+        - id: 3
+        - id: 3
+        parent:
+          id: 0
+        collider: {fileID: 0}
+        windupTime: 0.75
+        attackTime: 0.25
+        cooldownTime: 1
+        comboTime: 1
+    00000003:
+      type: {class: , ns: , asm: }
