@@ -249,7 +249,6 @@ namespace CombatSystem
             WindupStart?.Invoke();
             attacking = true;
             canCombo = false;
-            Debug.Log($"{Name} is in windup");
 
             yield return new WaitForSeconds(windupTime);
 
@@ -258,7 +257,6 @@ namespace CombatSystem
             {
                 collider.enabled = true;
             }
-            Debug.Log($"{Name} is attacking");
 
             yield return new WaitForSeconds(attackTime);
 
@@ -267,20 +265,17 @@ namespace CombatSystem
             {
                 collider.enabled = false;
             }
-            Debug.Log($"{Name} is in cooldown");
 
             yield return new WaitForSeconds(cooldownTime);
 
             CooldownEnd?.Invoke();
             attacking = false;
             canCombo = true;
-            Debug.Log($"{Name} is in combo time");
 
             yield return new WaitForSeconds(comboTime);
 
             ComboEnd?.Invoke();
             canCombo = false;
-            Debug.Log($"{Name} can no longer combo");
         }
 
         public string GetPathFromCollider(Collider col)
