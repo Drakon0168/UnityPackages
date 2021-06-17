@@ -15,6 +15,8 @@ namespace CombatSystem
 
         [SerializeField]
         private string[] chains;
+        [SerializeReference]
+        private CSWeapon weapon;
 
         #region Callbacks
 
@@ -52,14 +54,6 @@ namespace CombatSystem
 
         #region Accessors
 
-        private void OnValidate()
-        {
-            if(Entry.Chains.Length != Chains.Length)
-            {
-                Entry.ChainCount = Chains.Length;
-            }
-        }
-
         /// <summary>
         /// The full list of attacks in this combo tree
         /// </summary>
@@ -70,7 +64,7 @@ namespace CombatSystem
                 if(attacks == null || attacks.Count == 0)
                 {
                     attacks = new List<CSAttack>();
-                    attacks.Add(new CSAttack("Entry"));
+                    attacks.Add(new CSAttack("Entry", true));
                     attacks[0].ChainCount = Chains.Length;
                 }
 
@@ -100,6 +94,15 @@ namespace CombatSystem
         public string[] Chains
         {
             get { return chains; }
+            set
+            {
+                chains = value;
+
+                foreach (CSAttack attack in attacks)
+                {
+                    attack.ChainCount = value.Length;
+                }
+            }
         }
 
         public CSAttack ActiveAttack
@@ -112,9 +115,36 @@ namespace CombatSystem
             get { return nextAttack;}
         }
 
+        public CSWeapon Weapon
+        {
+            get { return weapon; }
+            set
+            {
+                weapon = value;
+
+                foreach(CSAttack attack in attacks)
+                {
+                    attack.Weapon = value;
+                }
+            }
+        }
+
         #endregion
 
         #region Attack Management
+
+        private void OnValidate()
+        {
+            if (Entry.Chains.Length != Chains.Length)
+            {
+                Entry.ChainCount = Chains.Length;
+
+                foreach(CSAttack attack in attacks)
+                {
+                    attack.ChainCount = Chains.Length;
+                }
+            }
+        }
 
         /// <summary>
         /// Adds an attack to the attack list 
@@ -125,6 +155,7 @@ namespace CombatSystem
         public void AddAttack(CSAttack attack, CSAttack parent, int chain)
         {
             attack.ChainCount = Chains.Length;
+            attack.Weapon = Weapon;
             attacks.Add(attack);
 
             if (parent != null)
@@ -191,7 +222,7 @@ namespace CombatSystem
                     nextAttack = activeAttack.Chains[input];
                 }
 
-                if(activeAttack == Entry && nextAttack != null)
+                if(nextAttack != null && (activeAttack.IsEntry || activeAttack.CanCombo))
                 {
                     SwitchAttack(nextAttack);
                 }
@@ -243,18 +274,18 @@ namespace CombatSystem
 
         private void OnCooldownEnd()
         {
-            if(nextAttack != null)
-            {
-                nextAttack.Attack();
-            }
-
             CooldownEnd?.Invoke();
-            QueueAttack?.Invoke();
+
+            if (nextAttack != null)
+            {
+                SwitchAttack(nextAttack);
+            }
         }
 
         private void OnComboEnd()
         {
             ComboEnd?.Invoke();
+            Reset();
         }
 
         #endregion

@@ -11,6 +11,9 @@ namespace CombatSystem {
         [SerializeField]
         private CSWeaponStats stats;
 
+        [SerializeField]
+        private string[] attackTypes;
+
         /// <summary>
         /// The attack stats associated with this weapon
         /// </summary>
@@ -19,9 +22,19 @@ namespace CombatSystem {
             get { return stats; }
         }
 
+        /// <summary>
+        /// List of attack types available to this weapon
+        /// </summary>
+        public string[] AttackTypes
+        {
+            get { return attackTypes; }
+        }
+
         private void Awake()
         {
             combo.QueueAttack += StartCurrentAttack;
+            combo.Weapon = this;
+            combo.Reset();
         }
 
         /// <summary>
@@ -35,7 +48,7 @@ namespace CombatSystem {
 
         private void StartCurrentAttack()
         {
-            if (combo.ActiveAttack != combo.Entry)
+            if (!combo.ActiveAttack.IsEntry)
             {
                 StartCoroutine(combo.ActiveAttack.Attack());
             }

@@ -11,16 +11,23 @@ namespace CombatSystem
     {
         [SerializeField]
         private string name;
+        [SerializeField]
         private Vector2 graphPosition;
         [SerializeReference]
         protected CSAttack[] chains = new CSAttack[0];
         [SerializeReference]
         protected CSAttack parent = null;
+        [SerializeField]
+        protected bool isEntry = false;
+
+        [SerializeReference]
+        protected CSWeapon weapon;
 
         [SerializeField]
         protected float damageMult;
-        [SerializeReference]
         protected Collider collider;
+        [SerializeField]
+        protected string colliderPath;
         [SerializeField]
         protected float windupTime;
         [SerializeField]
@@ -65,6 +72,14 @@ namespace CombatSystem
         #region Accessors
 
         /// <summary>
+        /// Whether or not this attack is the entry point into the graph
+        /// </summary>
+        public bool IsEntry
+        {
+            get { return isEntry; }
+        }
+
+        /// <summary>
         /// The list of attacks that this attack can chain to
         /// </summary>
         public CSAttack[] Chains
@@ -81,6 +96,19 @@ namespace CombatSystem
             set
             {
                 chains = new CSAttack[value];
+            }
+        }
+
+        /// <summary>
+        /// The weapon that this attack is attached to
+        /// </summary>
+        public CSWeapon Weapon
+        {
+            get { return weapon; }
+            set
+            {
+                weapon = value;
+                collider = GetColliderAtPath();
             }
         }
 
@@ -116,8 +144,32 @@ namespace CombatSystem
         /// </summary>
         public Collider Collider
         {
-            get { return collider; }
-            set { collider = value; }
+            get 
+            {
+                if(collider == null)
+                {
+                    collider = GetColliderAtPath();
+                }
+
+                return collider; 
+            }
+            set 
+            { 
+                collider = value;
+
+                if (weapon != null)
+                {
+                    colliderPath = GetPathFromCollider(value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// The transform path to the collider from the CSWeapon
+        /// </summary>
+        public string ColliderPath
+        {
+            get { return colliderPath; }
         }
 
         /// <summary>
@@ -183,19 +235,20 @@ namespace CombatSystem
 
         #endregion
 
-        public CSAttack(string name)
+        public CSAttack(string name, bool isEntry = false)
         {
             this.name = name;
+            this.isEntry = isEntry;
         }
 
         /// <summary>
         /// Starts the attack playing it's timers
         /// </summary>
-        public IEnumerator Attack()
+        public virtual IEnumerator Attack()
         {
             WindupStart?.Invoke();
             attacking = true;
-            canCombo = true;
+            canCombo = false;
             Debug.Log($"{Name} is in windup");
 
             yield return new WaitForSeconds(windupTime);
@@ -220,6 +273,7 @@ namespace CombatSystem
 
             CooldownEnd?.Invoke();
             attacking = false;
+            canCombo = true;
             Debug.Log($"{Name} is in combo time");
 
             yield return new WaitForSeconds(comboTime);
@@ -227,6 +281,55 @@ namespace CombatSystem
             ComboEnd?.Invoke();
             canCombo = false;
             Debug.Log($"{Name} can no longer combo");
+        }
+
+        public string GetPathFromCollider(Collider col)
+        {
+            List<Transform> transformPath = new List<Transform>();
+            string path = "";
+
+            transformPath.Add(col.transform);
+            while(transformPath[0] != weapon.transform && transformPath[0].parent != null)
+            {
+                transformPath.Insert(0, transformPath[0].parent);
+            }
+
+            if(transformPath[0] == weapon.transform)
+            {
+                for(int i = 0; i < transformPath.Count; i++)
+                {
+                    path += transformPath[i].gameObject.name + "/";
+                }
+                path = path.Substring(0, path.Length - 1);
+            }
+
+            return path;
+        }
+
+        public Collider GetColliderAtPath()
+        {
+            if (string.IsNullOrEmpty(colliderPath))
+            {
+                return null;
+            }
+
+            string[] transforms = colliderPath.Split('/');
+            GameObject current = weapon.gameObject;
+            for(int i = 1; i < transforms.Length; i++)
+            {
+                Transform[] children = current.GetComponentsInChildren<Transform>();
+
+                foreach(Transform t in children)
+                {
+                    if(t.gameObject.name == transforms[i])
+                    {
+                        current = t.gameObject;
+                        break;
+                    }
+                }
+            }
+
+            return current.GetComponent<Collider>();
         }
     }
 }

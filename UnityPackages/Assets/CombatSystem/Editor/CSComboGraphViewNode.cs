@@ -54,6 +54,7 @@ namespace CombatSystem
                 });
                 renameField.RegisterValueChangedCallback(e =>
                 {
+                    Data.Name = e.newValue;
                     title = e.newValue;
                     titleLabel.text = title;
 

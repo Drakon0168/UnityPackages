@@ -699,5 +699,9 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4450126616515529850, guid: 26e685368b6866e4e9b5be89be29898e, type: 3}
+      propertyPath: attackTypes.Array.data[2]
+      value: Light
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 26e685368b6866e4e9b5be89be29898e, type: 3}

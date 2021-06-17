@@ -8,17 +8,38 @@ namespace CombatSystem
     [CustomEditor(typeof(CSWeapon))]
     public class CSWeaponEditor : Editor
     {
+        SerializedProperty stats;
+        SerializedProperty combo;
+        SerializedProperty attackTypes;
+
+        private void OnEnable()
+        {
+            stats = serializedObject.FindProperty("stats");
+            combo = serializedObject.FindProperty("combo");
+            attackTypes = serializedObject.FindProperty("attackTypes");
+        }
+
         public override void OnInspectorGUI()
         {
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("stats"), new GUIContent("Stats", "The base stats of this weapon."));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("combo"), new GUIContent("Combo", "The combo tree used by this weapon."));
+            EditorGUILayout.PropertyField(stats, new GUIContent("Stats", "The base stats of this weapon."));
+            EditorGUILayout.PropertyField(combo, new GUIContent("Combo", "The combo tree used by this weapon."));
+
+            int attackCount = attackTypes.arraySize;
+            EditorGUILayout.PropertyField(attackTypes, new GUIContent("Attack Types", "List of the different types of attacks available to this weapon."));
 
             if (GUILayout.Button("Edit Combo"))
             {
-                EditorWindow.GetWindow<CSComboEditor>().OpenWindow((CSCombo)serializedObject.FindProperty("combo").objectReferenceValue);
+                ((CSCombo)combo.objectReferenceValue).Weapon = (CSWeapon)serializedObject.targetObject;
+                EditorWindow.GetWindow<CSComboEditor>().OpenWindow((CSCombo)combo.objectReferenceValue);
             }
 
-            serializedObject.ApplyModifiedProperties();
+            if (serializedObject.ApplyModifiedProperties())
+            {
+                if(attackCount != attackTypes.arraySize)
+                {
+                    ((CSCombo)combo.objectReferenceValue).Chains = ((CSWeapon)serializedObject.targetObject).AttackTypes;
+                }
+            }
         }
     }
 }
