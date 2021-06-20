@@ -9,7 +9,9 @@ namespace CombatSystem
     public class CSEntity : MonoBehaviour
     {
         public delegate void CSEntityEvent();
+        public delegate void CSCollisionEvent(CSEntity other);
 
+        [SerializeField]
         private CSEntityStats stats;
         private float health;
         private float shields;
@@ -120,12 +122,72 @@ namespace CombatSystem
 
         public event CSEntityEvent OnDamageTaken;
 
+        public event CSCollisionEvent OnEntityEnter;
+
+        public event CSCollisionEvent OnEntityHit;
+
+        public event CSCollisionEvent OnEntityExit;
+
         #endregion
 
         private void Awake()
         {
             Health = Stats.MaxHealth;
             Shields = Stats.MaxShields;
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (OnEntityEnter != null)
+            {
+                CSEntity other = collision.gameObject.GetComponent<CSEntity>();
+
+                if (other == null)
+                {
+                    other = collision.gameObject.GetComponentInParent<CSEntity>();
+                }
+
+                if (other != null)
+                {
+                    OnEntityEnter(other);
+                }
+            }
+        }
+
+        private void OnCollisionExit(Collision collision)
+        {
+            if (OnEntityExit != null)
+            {
+                CSEntity other = collision.gameObject.GetComponent<CSEntity>();
+
+                if (other == null)
+                {
+                    other = collision.gameObject.GetComponentInParent<CSEntity>();
+                }
+
+                if (other != null)
+                {
+                    OnEntityExit(other);
+                }
+            }
+        }
+
+        private void OnCollisionStay(Collision collision)
+        {
+            if (OnEntityHit != null)
+            {
+                CSEntity other = collision.gameObject.GetComponent<CSEntity>();
+
+                if (other == null)
+                {
+                    other = collision.gameObject.GetComponentInParent<CSEntity>();
+                }
+
+                if (other != null)
+                {
+                    OnEntityHit(other);
+                }
+            }
         }
 
         /// <summary>

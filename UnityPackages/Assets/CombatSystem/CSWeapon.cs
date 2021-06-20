@@ -15,6 +15,14 @@ namespace CombatSystem {
         private string[] attackTypes;
 
         /// <summary>
+        /// Whether or not the weapon is currently attacking
+        /// </summary>
+        public bool Attacking
+        {
+            get { return combo.Attacking; }
+        }
+
+        /// <summary>
         /// The attack stats associated with this weapon
         /// </summary>
         public CSWeaponStats Stats

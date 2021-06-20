@@ -16,7 +16,7 @@ namespace CombatSystem
         {
             this.asset = asset;
 
-            styleSheets.Add(Resources.Load<StyleSheet>("StyleSheet"));
+            styleSheets.Add(Resources.Load<StyleSheet>("CSStyleSheet"));
 
             SetupZoom(ContentZoomer.DefaultMinScale, ContentZoomer.DefaultMaxScale);
 
