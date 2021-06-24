@@ -31,6 +31,14 @@ namespace CombatSystem {
         }
 
         /// <summary>
+        /// The CSCombo used by this weapon
+        /// </summary>
+        public CSCombo Combo
+        {
+            get { return combo; }
+        }
+
+        /// <summary>
         /// List of attack types available to this weapon
         /// </summary>
         public string[] AttackTypes
