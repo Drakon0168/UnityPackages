@@ -11,11 +11,11 @@ namespace MovementSystem
     public class MSEntity : MSPhysicsObject
     {
         [SerializeField]
-        private MSEntityStats stats;
+        protected MSEntityStats stats;
 
-        private bool sprinting;
-        private bool dashing;
-        private float dashTime;
+        protected bool sprinting;
+        protected bool dashing;
+        protected float dashTime;
 
         #region Accessors
 
@@ -85,7 +85,7 @@ namespace MovementSystem
         /// </summary>
         /// <param name="moveDirection">The direction to move in.</param>
         /// <param name="absoluteDirection">Whether or not the direction is given in absolute or relative coordinates</param>
-        public void Move(Vector3 moveDirection, bool absoluteDirection = true)
+        public virtual void Move(Vector3 moveDirection, bool absoluteDirection = true)
         {
             if (!dashing)
             {
@@ -148,7 +148,7 @@ namespace MovementSystem
         /// Moves the player in the specified direction while dashing
         /// </summary>
         /// <param name="dashDirection"></param>
-        private IEnumerator StartDash(Vector3 dashDirection)
+        protected IEnumerator StartDash(Vector3 dashDirection)
         {
             DashStart?.Invoke();
             dashing = true;

@@ -1,0 +1,17 @@
+{
+    "name": "com.drakon.combat",
+    "version": "1.0.0",
+    "displayName": "Combat System",
+    "description": "Combat Systems provides the necessary tools for authoring combat systems, it provides a base for entities with health, shields, regen, etc, callbacks for various events related to health and damage, and tools for creating weapons and attack combos.",
+    "unity": "2020.1",
+    "keywords": [
+      "Tools",
+      "Utilities",
+      "Combat"
+    ],
+    "author": {
+      "name": "Justin Dennis",
+      "email": "justindennis48@gmail.com",
+      "url": "https://drakon0168.github.io/"
+    }
+}

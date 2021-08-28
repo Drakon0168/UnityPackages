@@ -41,7 +41,7 @@ namespace MovementSystem
 
         #region Unity Functions
 
-        void Awake()
+        protected virtual void Awake()
         {
             rigidbody = GetComponent<Rigidbody>();
         }

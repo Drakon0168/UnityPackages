@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using MovementSystem;
-using CombatSystem;
 
 public class Player : MonoBehaviour
 {
     private PlayerInput input;
     private MSEntity movementEntity;
-    [SerializeField]
-    private CSWeapon weapon;
     private Vector3 moveDirection;
 
     void Awake()
@@ -25,16 +22,6 @@ public class Player : MonoBehaviour
     }
 
     #region Input Management
-
-    private void OnLightAttack(InputValue value)
-    {
-        weapon.Attack(0);
-    }
-
-    private void OnHeavyAttack(InputValue value)
-    {
-        weapon.Attack(1);
-    }
 
     private void OnMove(InputValue value)
     {

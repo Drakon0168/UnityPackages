@@ -10,7 +10,7 @@ namespace MovementSystem
         [SerializeField]
         private float moveSpeed = 2.5f;
         [SerializeField]
-        private bool variableSpeed;
+        private bool variableSpeed = false;
         [SerializeField]
         private float strafeSpeedMult = 0.75f;
         [SerializeField]
@@ -36,7 +36,7 @@ namespace MovementSystem
         [SerializeField]
         private bool variableDashSpeed = true;
         [SerializeField]
-        private AnimationCurve dashSpeedOverTime;
+        private AnimationCurve dashSpeedOverTime = null;
 
         #region Accessors
 
