@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-namespace MovementSystem
+namespace Drakon.MovementSystem
 {
     [CustomEditor(typeof(MSEntityStats))]
     public class MSEntityStatsEditor : Editor

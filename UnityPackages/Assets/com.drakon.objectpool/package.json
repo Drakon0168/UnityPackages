@@ -1,0 +1,16 @@
+{
+  "name": "com.drakon.objectpool",
+  "version": "1.0.0",
+  "displayName": "Object Pool",
+  "description": "Generic object pooling system",
+  "unity": "2020.1",
+  "keywords": [
+    "Tools",
+    "Utilities"
+  ],
+  "author": {
+    "name": "Justin Dennis",
+    "email": "justindennis48@gmail.com",
+    "url": "https://drakon0168.github.io/"
+  }
+}

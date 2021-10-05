@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MovementSystem
+namespace Drakon.MovementSystem
 {
     [CreateAssetMenu(fileName = "NewMovementEntityStats", menuName = "MovementSystem/MSEntityStats")]
     public class MSEntityStats : ScriptableObject

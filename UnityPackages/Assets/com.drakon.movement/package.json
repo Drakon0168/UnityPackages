@@ -1,0 +1,17 @@
+{
+  "name": "com.drakon.movement",
+  "version": "1.0.0",
+  "displayName": "Movement System",
+  "description": "Movement System provides the necessary tools for authoring a movement system, it provides a base for entities with variables to control the look and feel of movement quickly with support for navmesh navigation as well as simple directional movement.",
+  "unity": "2020.1",
+  "keywords": [
+    "Tools",
+    "Utilities",
+    "Movement"
+  ],
+  "author": {
+    "name": "Justin Dennis",
+    "email": "justindennis48@gmail.com",
+    "url": "https://drakon0168.github.io/"
+  }
+}

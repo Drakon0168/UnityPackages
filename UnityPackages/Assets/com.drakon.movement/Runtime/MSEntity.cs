@@ -2,12 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-using MovementSystem;
-
-namespace MovementSystem
+namespace Drakon.MovementSystem
 {
-    public delegate void OnDash();
-
     public class MSEntity : MSPhysicsObject
     {
         [SerializeField]
@@ -66,15 +62,19 @@ namespace MovementSystem
             get { return dashing; }
         }
 
+        #endregion
+
+        #region Events
+
         /// <summary>
         /// Called when the entity begins a dash
         /// </summary>
-        public event OnDash DashStart;
+        public event System.Action DashStart;
 
         /// <summary>
         /// Called when the entity ends a dash
         /// </summary>
-        public event OnDash DashEnd;
+        public event System.Action DashEnd;
 
         #endregion
 

@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace MovementSystem
+namespace Drakon.MovementSystem
 {
-    public delegate void NavigationEvent();
-
     public class MSNavMeshEntity : MSEntity
     {
         private NavMeshAgent agent = null;
@@ -46,17 +44,17 @@ namespace MovementSystem
         /// <summary>
         /// Called when the agent starts following a path
         /// </summary>
-        public event NavigationEvent OnPathStart;
+        public event System.Action OnPathStart;
 
         /// <summary>
         /// Called when the agent reaches the destination
         /// </summary>
-        public event NavigationEvent OnDestination;
+        public event System.Action OnDestination;
 
         /// <summary>
         /// Called each time the agent reaches a new point on the path
         /// </summary>
-        public event NavigationEvent OnPointReached;
+        public event System.Action OnPointReached;
 
         #endregion
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MovementSystem
+namespace Drakon.MovementSystem
 {
     [RequireComponent(typeof(Rigidbody))]
     public class MSPhysicsObject : MonoBehaviour
