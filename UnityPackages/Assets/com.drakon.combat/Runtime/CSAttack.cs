@@ -1,137 +1,109 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Drakon.CombatSystem
 {
-    [System.Serializable]
-    public class CSAttack
-    {
-        [SerializeField]
-        private float windupTime = 0.0f;
-        [SerializeField]
-        private float attackTime = 0.0f;
-        [SerializeField]
-        private float cooldownTime = 0.0f;
-        [SerializeField]
-        private float comboTime = 0.0f;
+	public class CSAttack
+	{
+		private CancellationTokenSource comboTimer;
+		
+		#region Accessors
+		
+		/// <summary>
+		/// The attack stats to use for this attack
+		/// </summary>
+		public CSAttackStats Stats
+		{
+			get;
+			private set;
+		}
+		
+		#endregion
+		
+		#region Events
+		
+		/// <summary>
+		/// Called when the attack is started
+		/// </summary>
+		public event System.Action OnAttackStart;
+		
+		/// <summary>
+		/// Called at the beginning of the attack's windup phase
+		/// </summary>
+		public event System.Action OnWindupStart;
+		
+		/// <summary>
+		/// Called at the beginning of the attack's active phase
+		/// </summary>
+		public event System.Action OnActiveStart;
+		
+		/// <summary>
+		/// Called at the beginning of the attack's cooldown phase
+		/// </summary>
+		public event System.Action OnCooldownStart;
 
-        [SerializeField]
-        private string name = "";
-        [SerializeField]
-        private Collider collider = null;
-        [SerializeReference]
-        private List<CSAttack> children = new List<CSAttack>();
-        [SerializeReference]
-        private CSAttack parent = null;
-        [SerializeField]
-        private int attackIndex = 0;
+		/// <summary>
+		/// Called at the end of the attack's cooldown phase
+		/// </summary>
+		public event System.Action OnCooldownEnd;
+		
+		/// <summary>
+		/// Called at the beginning of the attack's combo phase (between active start and combo end)
+		/// </summary>
+		public event System.Action OnComboStart;
+		
+		/// <summary>
+		/// Called at the end of the attack's combo phase
+		/// </summary>
+		public event System.Action OnComboEnd;
+		
+		#endregion
+		
+		#region Constructor
 
-        #region Accessors
+		public CSAttack(CSAttackStats stats)
+		{
+			Stats = stats;
+			comboTimer = new CancellationTokenSource();
+		}
 
-        /// <summary>
-        /// The time taken from the start of the attack to when the hitbox becomes active
-        /// </summary>
-        public float WindupTime
-        {
-            get { return windupTime; }
-        }
+		#endregion
+		
+		#region Attack Timers
+		
+		public async void Attack()
+		{
+			OnAttackStart?.Invoke();
+			OnWindupStart?.Invoke();
 
-        /// <summary>
-        /// The time that the hitbox remains active during the attack
-        /// </summary>
-        public float AttackTime
-        {
-            get { return attackTime; }
-        }
+			await Task.Delay((int)(Stats.WindupTime * 1000));
+			
+			OnActiveStart?.Invoke();
 
-        /// <summary>
-        /// The time after the end of the attack where no other action can be taken
-        /// </summary>
-        public float CooldownTime
-        {
-            get { return cooldownTime; }
-        }
+			Task.Run(async () =>
+			{
+				OnComboStart?.Invoke();
 
-        /// <summary>
-        /// The time after the cooldown where this attack can be combo'd into another attack
-        /// </summary>
-        public float ComboTime
-        {
-            get { return comboTime; }
-        }
+				await Task.Delay((int) (Stats.ComboTime * 1000));
 
-        /// <summary>
-        /// The display name of the attack
-        /// </summary>
-        public string Name
-        {
-            get { return name; }
-        }
+				OnComboEnd?.Invoke();
+			}, comboTimer.Token);
+			
+			await Task.Delay((int)(Stats.AttackTime * 1000));
 
-        /// <summary>
-        /// The collider to associate with this attack
-        /// </summary>
-        public Collider Collider
-        {
-            get { return collider; }
-        }
+			OnCooldownStart?.Invoke();
+			
+			await Task.Delay((int)(Stats.CooldownTime * 1000));
 
-        /// <summary>
-        /// The attacks that can be chained to from this attack
-        /// </summary>
-        public List<CSAttack> Children
-        {
-            get { return children; }
-            set { children = value; }
-        }
+			OnCooldownEnd?.Invoke();
+		}
 
-        /// <summary>
-        /// The attack that this attack was chained from
-        /// </summary>
-        public CSAttack Parent
-        {
-            get { return parent; }
-            set 
-            {
-                if (parent != null && parent.Children != null)
-                {
-                    parent.children.RemoveAt(attackIndex);
-                }
+		public void CancelCombo()
+		{
+			comboTimer.Cancel();
+		}
 
-                parent = value;
-                parent.Children[attackIndex] = this;
-            }
-        }
-
-        /// <summary>
-        /// The index in the parent's children list that refers to this attack. Typically this number refers to the input used to trigger the attack
-        /// </summary>
-        public int AttackIndex
-        {
-            get { return attackIndex; }
-            set 
-            {
-                if(parent != null && parent.Children != null && parent.Children[attackIndex] == this)
-                {
-                    parent.Children[attackIndex] = null;
-                    parent.Children[value] = this;
-                }
-                attackIndex = value;
-            }
-        }
-
-        #endregion
-
-        #region Constructor
-
-        public CSAttack(string name, CSAttack parent = null, int attackIndex = 0)
-        {
-            this.name = name;
-            this.parent = parent;
-            this.attackIndex = attackIndex;
-        }
-
-        #endregion
-    }
+		#endregion 
+	}
 }

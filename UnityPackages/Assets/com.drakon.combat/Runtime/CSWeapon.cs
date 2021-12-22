@@ -1,31 +1,34 @@
-﻿using System.Collections;
 using System.Collections.Generic;
+using Drakon.CombatSystem;
 using UnityEngine;
 
 namespace Drakon.CombatSystem
 {
     public class CSWeapon : MonoBehaviour
     {
-        [SerializeReference]
-        private List<CSAttack> attacks = new List<CSAttack>();
-        private string[] attackTypes;
+        [SerializeField]
+        private List<CSAttackStats> attacks;
 
-        #region Accessors
-
-        public CSAttack Root
+        public CSAttackStats Root
         {
             get
             {
-                if(attacks.Count == 0)
+                if (attacks == null)
                 {
-                    attacks.Add(new CSAttack("Root"));
+                    attacks = new List<CSAttackStats> {new CSAttackStats("Idle")};
                 }
 
                 return attacks[0];
             }
-            set { attacks[0] = value; }
-        }
+            set
+            {
+                if (attacks == null)
+                {
+                    attacks = new List<CSAttackStats> {new CSAttackStats("Idle")};
+                }
 
-        #endregion
+                attacks[0] = value;
+            }
+        }
     }
 }
