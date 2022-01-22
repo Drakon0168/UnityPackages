@@ -1,14 +1,18 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Drakon.MovementSystem
 {
-    public class MSEntity : MSPhysicsObject
+    [RequireComponent(typeof(Rigidbody))]
+    public class MSEntity : MonoBehaviour
     {
         [SerializeField]
         protected MSEntityStats stats;
-
+        [SerializeField]
+        protected new Rigidbody rigidbody;
+        
         protected bool sprinting;
         protected bool dashing;
         protected float dashTime;
@@ -41,8 +45,8 @@ namespace Drakon.MovementSystem
         /// </summary>
         public MSEntityStats Stats
         {
-            get { return stats; }
-            set { stats = value; }
+            get => stats;
+            set => stats = value;
         }
 
         /// <summary>
@@ -50,16 +54,19 @@ namespace Drakon.MovementSystem
         /// </summary>
         public bool Sprinting
         {
-            get { return sprinting; }
-            set { sprinting = value; }
+            get => sprinting;
+            set => sprinting = value;
         }
 
         /// <summary>
         /// Whether or not the entity is currently dashing
         /// </summary>
-        public bool Dashing
+        public bool Dashing => dashing;
+
+        public Vector3 Velocity
         {
-            get { return dashing; }
+            get => rigidbody.velocity;
+            set => rigidbody.velocity = value;
         }
 
         #endregion
@@ -69,12 +76,12 @@ namespace Drakon.MovementSystem
         /// <summary>
         /// Called when the entity begins a dash
         /// </summary>
-        public event System.Action DashStart;
+        public event System.Action OnDashStart;
 
         /// <summary>
         /// Called when the entity ends a dash
         /// </summary>
-        public event System.Action DashEnd;
+        public event System.Action OnDashEnd;
 
         #endregion
 
@@ -125,10 +132,10 @@ namespace Drakon.MovementSystem
                 if (forceLength != 0)
                     forceDirection /= forceLength;
 
-                ApplyForce(forceDirection * Mathf.Clamp(forceLength / stats.AccelerationTime, 0.0f, stats.MoveForce));
+                rigidbody.AddForce(forceDirection * Mathf.Clamp(forceLength / stats.AccelerationTime, 0.0f, stats.MoveForce), ForceMode.Force);
             }
         }
-
+        
         /// <summary>
         /// Initiates a dash in the specified direction
         /// </summary>
@@ -150,7 +157,7 @@ namespace Drakon.MovementSystem
         /// <param name="dashDirection"></param>
         protected IEnumerator StartDash(Vector3 dashDirection)
         {
-            DashStart?.Invoke();
+            OnDashStart?.Invoke();
             dashing = true;
             dashTime = 0.0f;
             dashDirection.y = 0;
@@ -166,7 +173,7 @@ namespace Drakon.MovementSystem
             }
 
             dashing = false;
-            DashEnd?.Invoke();
+            OnDashEnd?.Invoke();
         }
 
         /// <summary>

@@ -60,10 +60,8 @@ namespace Drakon.MovementSystem
 
         #region Unity Methods
 
-        protected override void Awake()
+        protected void Awake()
         {
-            base.Awake();
-
             agent = GetComponent<NavMeshAgent>();
             agent.updatePosition = false;
             agent.updateRotation = false;
