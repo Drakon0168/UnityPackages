@@ -1,5 +1,5 @@
 {
-    "name": "com.drakon.objectpool.runtime",
+    "name": "com.drakon.objectpool",
     "rootNamespace": "Drakon.ObjectPool",
     "references": [],
     "includePlatforms": [],
