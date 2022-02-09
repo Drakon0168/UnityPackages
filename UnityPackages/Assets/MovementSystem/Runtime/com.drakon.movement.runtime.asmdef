@@ -1,0 +1,14 @@
+{
+    "name": "com.drakon.movement.runtime",
+    "rootNamespace": "Drakon.MovementSystem",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
