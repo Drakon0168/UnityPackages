@@ -1,12 +1,18 @@
+using System;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace Drakon.CombatSystem
 {
-	public class CSAttack
+	public class CSAttack : MonoBehaviour
 	{
-		private CancellationTokenSource comboTimer;
+		[SerializeField]
+		private CSAttackStats stats;
+		
+		protected CancellationTokenSource attackToken;
+		protected CancellationTokenSource comboToken;
 		
 		#region Accessors
 		
@@ -15,8 +21,8 @@ namespace Drakon.CombatSystem
 		/// </summary>
 		public CSAttackStats Stats
 		{
-			get;
-			private set;
+			get => stats;
+			protected set => stats = value;
 		}
 		
 		#endregion
@@ -65,14 +71,26 @@ namespace Drakon.CombatSystem
 		public CSAttack(CSAttackStats stats)
 		{
 			Stats = stats;
-			comboTimer = new CancellationTokenSource();
+			attackToken = new CancellationTokenSource();
+			comboToken = new CancellationTokenSource();
 		}
 
 		#endregion
 		
 		#region Attack Timers
 		
-		public async void Attack()
+		/// <summary>
+		/// Starts the attack triggering the OnAttackStart and OnWindupStart events
+		/// </summary>
+		public virtual void Attack()
+		{
+			Task.Run(StartAttack, attackToken.Token);
+		}
+
+		/// <summary>
+		/// Called when the attack starts, this handles the attack timers and triggers attack events
+		/// </summary>
+		protected virtual async void StartAttack()
 		{
 			OnAttackStart?.Invoke();
 			OnWindupStart?.Invoke();
@@ -81,27 +99,44 @@ namespace Drakon.CombatSystem
 			
 			OnActiveStart?.Invoke();
 
-			Task.Run(async () =>
-			{
-				OnComboStart?.Invoke();
-
-				await Task.Delay((int) (Stats.ComboTime * 1000));
-
-				OnComboEnd?.Invoke();
-			}, comboTimer.Token);
-			
 			await Task.Delay((int)(Stats.AttackTime * 1000));
 
 			OnCooldownStart?.Invoke();
+			
+			Task.Run(StartCombo, comboToken.Token);
 			
 			await Task.Delay((int)(Stats.CooldownTime * 1000));
 
 			OnCooldownEnd?.Invoke();
 		}
 
-		public void CancelCombo()
+		/// <summary>
+		/// Cancels the attack and combo async tasks
+		/// </summary>
+		public virtual void CancelAttack()
 		{
-			comboTimer.Cancel();
+			attackToken.Cancel();
+			CancelCombo();
+		}
+
+		/// <summary>
+		/// Starts the combo async task
+		/// </summary>
+		protected virtual async void StartCombo()
+		{
+			OnComboStart?.Invoke();
+
+			await Task.Delay((int) (Stats.ComboTime * 1000));
+
+			OnComboEnd?.Invoke();
+		}
+
+		/// <summary>
+		/// Cancels the combo async task
+		/// </summary>
+		public virtual void CancelCombo()
+		{
+			comboToken.Cancel();
 		}
 
 		#endregion 
