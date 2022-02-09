@@ -3,9 +3,7 @@
     "rootNamespace": "Drakon.MovementSystem",
     "references": [],
     "includePlatforms": [],
-    "excludePlatforms": [
-        "Editor"
-    ],
+    "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
     "precompiledReferences": [],
