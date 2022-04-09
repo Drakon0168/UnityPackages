@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using Drakon.MovementSystem;
 
-namespace Drakon.MovementSystem
+namespace Drakon.MovementSystemEditor
 {
     [CustomEditor(typeof(MSEntityStats))]
     public class MSEntityStatsEditor : Editor

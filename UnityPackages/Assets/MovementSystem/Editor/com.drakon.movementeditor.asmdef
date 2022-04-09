@@ -1,0 +1,20 @@
+{
+    "name": "com.drakon.movementeditor",
+    "rootNamespace": "Drakon.MovementSystemEditor",
+    "references": [
+        "GUID:e756da4b39f5dbd459740fb7e447ef10"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "UNITY_EDITOR"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
