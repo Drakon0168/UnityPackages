@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace Drakon.MovementSystem
 {
-    [RequireComponent(typeof(Rigidbody))]
     public class MSEntity : MonoBehaviour
     {
         [SerializeField]
@@ -65,8 +64,8 @@ namespace Drakon.MovementSystem
 
         public Vector3 Velocity
         {
-            get => rigidbody.velocity;
-            set => rigidbody.velocity = value;
+            get => rigidbody.linearVelocity;
+            set => rigidbody.linearVelocity = value;
         }
 
         #endregion
